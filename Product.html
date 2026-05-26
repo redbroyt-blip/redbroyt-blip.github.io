@@ -842,6 +842,7 @@ footer::before {
   background: radial-gradient(circle, rgba(255,255,255,0.2), transparent 60%);
   opacity: 0;
   transition: 0.3s;
+  pointer-events: none;
 }
 
 .social-btn:hover::after {
@@ -1594,7 +1595,13 @@ footer::before {
     width: 48px !important;
     height: 48px !important;
   }
-  
+  .footer-bottom {
+    flex-direction: column !important;
+    gap: 6px !important;
+    text-align: center !important;
+    margin-top: 30px !important;
+    padding: 0 16px;
+  }
 
   /* PRIVACY BANNER */
   .privacy-inner {
