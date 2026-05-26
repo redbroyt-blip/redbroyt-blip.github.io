@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="unsafe-url">
+
+<title>Галерея — Хавелов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1a2e1a;
+    --forest-deep: #0d1f0d;
+    --forest-mid: #2a3f2a;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-pale: #f5e6b8;
+    --cream: #faf6ec;
+    --white: #ffffff;
+    --text-light: #d4c9a0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--forest-deep);
+    color: var(--cream);
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(13,31,13,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding: 0 40px;
+    height: 72px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    transition: background 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(0,0,0,0.30);
+    border-bottom-color: rgba(255,255,255,0.06);
+  }
+
+  .nav-logo {
+    justify-self: start;
+    display: flex; align-items: center;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+  .nav-logo img { height: 56px; transition: 0.3s ease; }
+  .nav-logo img:hover { transform: scale(1.05); filter: drop-shadow(0 0 6px rgba(212,175,55,0.4)); }
+
+  .nav-logo-icon {
+    width: 38px; height: 38px;
+    border-radius: 50%; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-logo-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .nav-logo:hover { filter: drop-shadow(0 0 6px rgba(212,175,55,0.35)); }
+
+  #main-nav .nav-center { justify-self: center; font-size: 22px; pointer-events: none; user-select: none; }
+
+  .nav-right { justify-self: end; }
+
+  .nav-home-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+    text-decoration: none; color: #111;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 14px;
+    border: 2px solid #ffd700;
+    background: linear-gradient(135deg, #ffd700 0%, #d4af37 50%, #ffea70 100%);
+    background-size: 200% 200%;
+    box-shadow: 0 0 18px rgba(255,215,0,0.4), 0 4px 14px rgba(0,0,0,0.25);
+    position: relative; overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: homeBtn-glow 3s ease-in-out infinite;
+  }
+  @keyframes homeBtn-glow {
+    0%, 100% { box-shadow: 0 0 16px rgba(255,215,0,0.4), 0 4px 14px rgba(0,0,0,0.2); }
+    50%       { box-shadow: 0 0 30px rgba(255,215,0,0.75), 0 6px 20px rgba(0,0,0,0.3); }
+  }
+  .nav-home-btn:hover { transform: translateY(-3px) scale(1.06); }
+  .nav-home-btn:active { transform: scale(0.96); }
+  .nav-home-btn svg { flex-shrink: 0; transition: transform 0.3s; }
+  .nav-home-btn:hover svg { transform: translateY(-1px); }
+  .nav-home-shine {
+    position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+    animation: homeBtn-shine 2.5s ease-in-out infinite;
+  }
+  @keyframes homeBtn-shine {
+    0%   { left: -100%; }
+    40%  { left: 130%; }
+    100% { left: 130%; }
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 65vh;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 60%, rgba(42,63,42,0.6) 0%, transparent 60%),
+      radial-gradient(ellipse at 75% 25%, rgba(201,168,76,0.12) 0%, transparent 50%),
+      linear-gradient(180deg, var(--forest-deep) 0%, #162a16 50%, var(--forest-deep) 100%);
+  }
+
+  /* золотой shimmer поверх hero */
+  .hero-shimmer {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(115deg,
+      transparent 30%,
+      rgba(201,168,76,0.07) 50%,
+      transparent 70%);
+    background-size: 200% 100%;
+    animation: heroShimmer 6s ease-in-out infinite;
+  }
+  @keyframes heroShimmer {
+    0%   { background-position: 200% 0; }
+    50%  { background-position: 0% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* плавающие золотые частицы в hero */
+  .hero-sparkle {
+    position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden;
+  }
+  .hero-spark {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: var(--gold);
+    border-radius: 50%;
+    opacity: 0;
+    animation: sparkFloat linear infinite;
+  }
+  @keyframes sparkFloat {
+    0%   { transform: translateY(100%) scale(0); opacity: 0; }
+    15%  { opacity: 0.7; }
+    85%  { opacity: 0.3; }
+    100% { transform: translateY(-80px) scale(1.5); opacity: 0; }
+  }
+
+  .hero-particles {
+    position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--gold);
+    border-radius: 50%;
+    opacity: 0;
+    animation: particleFloat var(--dur, 8s) var(--delay, 0s) ease-in-out infinite;
+  }
+
+  @keyframes particleFloat {
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-20vh) scale(1.5); opacity: 0; }
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center;
+    padding: 120px 20px 80px; max-width: 860px;
+  }
+
+  @keyframes heroFadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes heroFadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes heroScaleIn {
+    from { opacity: 0; transform: scale(0.88); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid rgba(201,168,76,0.45);
+    border-radius: 50px;
+    padding: 9px 24px;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 36px;
+    white-space: nowrap;
+    background: rgba(201,168,76,0.07);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    animation: heroFadeDown 0.9s 0.2s ease forwards;
+    box-shadow: 0 0 18px rgba(201,168,76,0.1);
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(46px, 7vw, 88px);
+    font-weight: 900; line-height: 0.95;
+    margin-bottom: 24px;
+    color: var(--white);
+    opacity: 0;
+    animation: heroScaleIn 1s 0.45s ease forwards;
+    text-shadow: 0 4px 32px rgba(0,0,0,0.5);
+  }
+
+  .hero-title span {
+    color: var(--gold); font-style: italic; display: block;
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 300;
+    color: var(--text-light);
+    max-width: 560px; margin: 0 auto 40px;
+    line-height: 1.6;
+    opacity: 0;
+    animation: heroFadeIn 1s 0.7s ease forwards;
+  }
+
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--text-light); font-size: 10px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    animation: heroFadeIn 1.2s 1s ease both;
+  }
+
+  .hero-scroll-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollLine 1.5s ease-in-out infinite;
+  }
+
+  @keyframes scrollLine {
+    0%,100% { transform: scaleY(1); opacity: 1; }
+    50%      { transform: scaleY(0.5); opacity: 0.4; }
+  }
+
+  /* ─── SECTION LAYOUT ─── */
+  section { position: relative; z-index: 1; }
+
+  .container {
+    max-width: 1280px; margin: 0 auto; padding: 0 40px;
+  }
+
+  .section-header {
+    text-align: center; margin-bottom: 64px;
+  }
+
+  .section-eyebrow {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px;
+  }
+
+  .section-eyebrow::before,
+  .section-eyebrow::after {
+    content: ''; width: 32px; height: 1px; background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700; color: var(--white); line-height: 1.1;
+  }
+
+  .section-title em { color: var(--gold); font-style: italic; }
+
+  .section-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; color: var(--text-light);
+    margin-top: 20px; max-width: 560px;
+    margin-left: auto; margin-right: auto;
+    line-height: 1.6;
+  }
+
+  /* ─── GALLERY GRID ─── */
+  .gallery-section {
+    padding: 90px 0 100px;
+    position: relative; z-index: 1;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .gallery-card {
+    background: linear-gradient(135deg, rgba(22,42,22,0.85) 0%, rgba(14,28,14,0.95) 100%);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .gallery-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .gallery-card:hover {
+    border-color: rgba(201,168,76,0.45);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.1);
+    transform: translateY(-6px) !important;
+  }
+
+  .gallery-card-img-wrap {
+    position: relative; overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+
+  .gallery-card-img-wrap img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.4s;
+    filter: brightness(0.9) saturate(0.85);
+  }
+
+  .gallery-card:hover .gallery-card-img-wrap img {
+    transform: scale(1.06);
+    filter: brightness(1) saturate(1.05);
+  }
+
+  .gallery-card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(13,31,13,0.85) 0%, transparent 55%);
+    display: flex; align-items: flex-end; padding: 16px;
+    opacity: 0; transition: opacity 0.4s;
+  }
+
+  .gallery-card:hover .gallery-card-overlay { opacity: 1; }
+
+  .gallery-card-zoom {
+    margin-left: auto;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+  }
+
+  /* ─── STATS STRIP ─── */
+  .stats-strip {
+    background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(42,63,42,0.3) 100%);
+    border-top: 1px solid rgba(201,168,76,0.15);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    padding: 60px 0;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(201,168,76,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 800px; margin: 0 auto;
+  }
+
+  .stat-item {
+    background: var(--forest-deep);
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px; font-weight: 900;
+    color: var(--gold); line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-light);
+  }
+
+  /* ─── LIGHTBOX ─── */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(10,20,10,0.97);
+    display: none; align-items: center; justify-content: center;
+    padding: 20px;
+    animation: lbFadeIn 0.3s ease;
+  }
+
+  .lightbox.open { display: flex; }
+
+  @keyframes lbFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .lightbox-inner {
+    position: relative; max-width: 90vw; max-height: 90vh;
+  }
+
+  .lightbox-inner img {
+    max-width: 100%; max-height: 90vh;
+    border-radius: 8px;
+    border: 1px solid rgba(201,168,76,0.3);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.8);
+    animation: lbSlide 0.35s ease;
+  }
+
+  @keyframes lbSlide {
+    from { transform: scale(0.92); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .lightbox-close {
+    position: absolute; top: -16px; right: -16px;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold); font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.3s;
+  }
+
+  .lightbox-close:hover {
+    background: var(--gold); color: var(--forest-deep);
+  }
+
+  .lightbox-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold); font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.3s;
+  }
+
+  .lightbox-nav:hover {
+    background: rgba(201,168,76,0.3);
+    border-color: var(--gold);
+  }
+
+  .lightbox-prev { left: -60px; }
+  .lightbox-next { right: -60px; }
+
+  .lightbox-counter {
+    position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%);
+    font-size: 12px; letter-spacing: 0.12em; color: var(--text-light);
+  }
+
+  /* ─── FADE UP ─── */
+  .fade-up {
+    opacity: 0; transform: translateY(40px);
+    transition: 0.8s ease;
+  }
+
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 80px 0 30px;
+    background: #0e0f10;
+    color: #fff;
+    position: relative; overflow: hidden;
+  }
+
+  footer::before {
+    content: "";
+    position: absolute; top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(46,204,113,0.15), transparent 60%);
+    filter: blur(40px);
+  }
+
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between;
+    align-items: flex-start; gap: 48px;
+  }
+
+  .footer-col {
+    display: flex; flex-direction: column; align-items: flex-start;
+  }
+
+  .footer-logo {
+    font-size: 28px; font-weight: 700; line-height: 1.2; margin-bottom: 14px;
+  }
+
+  .footer-logo span { color: #2ecc71; }
+
+  .social-title {
+    color: #ffd54a; margin-bottom: 14px;
+    font-size: 18px; font-weight: 600; line-height: 1.2;
+  }
+
+  .footer-social {
+    display: flex; align-items: center; gap: 14px;
+  }
+
+  .social-btn {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(6px);
+    transition: 0.25s ease;
+    position: relative; overflow: hidden;
+  }
+
+  .social-btn svg { width: 20px; height: 20px; fill: white; z-index: 2; }
+  .social-btn:hover { transform: translateY(-4px) scale(1.05); border-color: transparent; }
+  .social-btn.telegram:hover { background: #1e3a5f; box-shadow: 0 10px 25px rgba(30,58,95,0.4); }
+  .social-btn.vk:hover { background: #0077ff !important; border-color: #0077ff !important; box-shadow: 0 10px 25px rgba(0,119,255,0.45) !important; }
+  .social-btn.email:hover { background: #c0392b; box-shadow: 0 10px 25px rgba(192,57,43,0.35); }
+  .social-btn.phone:hover { background: #2ecc71; box-shadow: 0 10px 25px rgba(46,204,113,0.35); }
+
+  .social-btn::after {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.2), transparent 60%);
+    opacity: 0; transition: 0.3s;
+  }
+  .social-btn:hover::after { opacity: 1; }
+
+  .footer-col-title {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #2ecc71; margin-bottom: 16px;
+  }
+
+  .footer-contact, .footer-address {
+    font-size: 16px; opacity: 0.7; line-height: 1.8;
+  }
+
+  .footer-bottom {
+    max-width: 1200px; margin: 50px auto 0; padding-top: 28px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; opacity: 0.5;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .container { padding: 0 20px; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+    .lightbox-prev { left: -44px; }
+    .lightbox-next { right: -44px; }
+    .footer-inner { flex-direction: column; gap: 32px; }
+    .footer-bottom { flex-direction: column; gap: 8px; }
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 0 12px; }
+    #main-nav { padding: 0 12px; }
+    #main-nav .nav-logo img { height: 44px; }
+    .hero-title { font-size: clamp(30px, 9vw, 48px) !important; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .gallery-item img { border-radius: 8px; }
+    .filter-bar { flex-wrap: wrap; gap: 6px; padding: 0 12px; }
+    .filter-btn { font-size: 10px; padding: 8px 12px; }
+    .lightbox-prev, .lightbox-next { display: flex; width: 40px; height: 40px; font-size: 24px; }
+    .lightbox-prev { left: -44px; }
+    .lightbox-next { right: -44px; }
+    .lightbox-inner { max-width: calc(100vw - 100px); }
+    .footer-social { flex-wrap: wrap; gap: 10px; }
+    .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+  }
+
+  /* ─── PRELOADER ─── */
+  #preloader {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #1a3a2a;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s;
+  }
+  #preloader.hidden { opacity: 0; visibility: hidden; pointer-events:none; }
+  .pre-leaf {
+    width: 60px; height: 60px;
+    border: 3px solid transparent;
+    border-top-color: #52b788;
+    border-radius: 50%;
+    animation: pre-spin 1s linear infinite;
+  }
+  .pre-text {
+    color: #b7e4c7; font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; margin-top: 20px; letter-spacing: 3px;
+    animation: pre-pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pre-spin { to { transform: rotate(360deg); } }
+  @keyframes pre-pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+  /* ─── FLOATING PARTICLES BG ─── */
+  .particles-bg-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .particle-bg {
+    position: absolute;
+    background: #52b788;
+    border-radius: 50%;
+    opacity: 0;
+    animation: float-up-bg linear infinite;
+  }
+  @keyframes float-up-bg {
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    10%  { opacity: 0.25; }
+    90%  { opacity: 0.08; }
+    100% { transform: translateY(-20px) scale(1); opacity: 0; }
+  }
+
+
+  /* ─── NAV GLAVNAY STYLE ─── */
+  #main-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    height: 76px; padding: 0 20px;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    background: rgba(15, 61, 46, 0.92);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+    transition: 0.4s ease;
+  }
+  #main-nav.scrolled {
+    background: rgba(0,0,0,0.30);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  #main-nav .nav-logo { justify-self: start; }
+  #main-nav .nav-logo img { height: 60px; transition: 0.3s ease; }
+  #main-nav .nav-logo img:hover { transform: scale(1.05); filter: drop-shadow(0 0 6px rgba(212,175,55,0.4)); }
+  #main-nav .nav-center { justify-self: center; font-size: 22px; pointer-events: none; user-select:none; }
+  #main-nav .nav-links {
+    justify-self: end; display: flex; align-items: center; gap: 6px;
+    margin: 0; padding: 0; list-style: none; flex-wrap: nowrap; white-space: nowrap;
+  }
+  #main-nav .nav-links a {
+    display: inline-flex; align-items: center;
+    padding: 5px 10px; font-size: 11px; text-decoration: none; color: #ffd700;
+    border-radius: 10px; border: 1px solid #d4af37; background: transparent;
+    position: relative; overflow: hidden; transition: all 0.3s ease;
+    font-family: 'Montserrat', sans-serif; font-weight: 500;
+  }
+  #main-nav .nav-links a:hover { transform: translateY(-2px); color: #fff; border-color: #ffd700; box-shadow: 0 0 14px rgba(255,215,0,0.35); }
+  #main-nav .nav-links a::before {
+    content: ""; position: absolute; top: 0; left: -120%; width: 120%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,215,0,0.4), transparent);
+    transition: 0.6s;
+  }
+  #main-nav .nav-links a:hover::before { left: 120%; }
+  #main-nav .nav-links a:active { transform: scale(0.97); }
+  #main-nav .nav-cta, #main-nav .nav-tg {
+    padding: 8px 14px !important; font-size: 12px !important;
+    border-radius: 12px !important; color: #111 !important; font-weight: 700 !important;
+    border: 2px solid #ffd700 !important;
+    background: linear-gradient(135deg, #ffd700, #d4af37, #ffea70) !important;
+    background-size: 200% 200% !important;
+    box-shadow: 0 0 18px rgba(255,215,0,0.4) !important;
+  }
+  #main-nav .nav-cta:hover, #main-nav .nav-tg:hover { transform: translateY(-2px) scale(1.07) !important; box-shadow: 0 0 26px rgba(255,215,0,0.6) !important; }
+  @media (max-width: 768px) { #main-nav .nav-links { display: none; } }
+
+
+  /* ─── PRIVACY BANNER ─── */
+  .privacy-banner {
+    position: fixed; left: 50%; bottom: 20px;
+    transform: translate(-50%, 120%); opacity: 0;
+    width: min(720px, 92%); z-index: 99999;
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .privacy-banner.show { transform: translate(-50%, 0); opacity: 1; }
+  .privacy-inner {
+    display: flex; justify-content: space-between; gap: 20px;
+    padding: 18px 20px; border-radius: 18px;
+    background: rgba(15, 61, 46, 0.92);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .privacy-text h3 { color: #ffd700; font-size: 1rem; margin-bottom: 6px; }
+  .privacy-text p { color: rgba(255,255,255,0.75); font-size: 0.85rem; line-height: 1.4; margin: 4px 0; max-width: 420px; }
+  .privacy-actions { display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+  .privacy-btn {
+    padding: 10px 14px; border-radius: 10px; border: none; cursor: pointer;
+    background: linear-gradient(135deg,#ffd700,#d4af37,#ffea70);
+    color: #111; font-weight: 700; font-size: 0.85rem;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .privacy-more {
+    padding: 10px 14px; border-radius: 10px; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.85rem; text-align:center;
+  }
+  .privacy-more:hover { background: rgba(255,255,255,0.08); }
+
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="pre-leaf"></div>
+  <div class="pre-text">🌳 Хавелов Продукт</div>
+</div>
+
+<!-- PARTICLES -->
+<div class="particles" id="particles-bg"></div>
+
+
+<!-- NAV -->
+<!-- NAV -->
+<nav id="main-nav">
+  <a class="nav-logo" href="Home.html">
+    <img src="https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/865f6ee3-32b3-46be-a01d-76eecb7e3296/865f6ee3-32b3-46be-a01d-76eecb7e3296-16098362.png" alt="logo">
+  </a>
+  <div class="nav-center">🌳</div>
+  <div class="nav-right">
+    <a href="index.html" class="nav-home-btn">
+      <span class="nav-home-shine"></span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+      Главная
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding-top:72px;">
+  <div class="hero-bg"></div>
+  <div class="hero-shimmer"></div>
+  <div class="hero-sparkle" id="hero-sparkle"></div>
+  <div class="hero-particles" id="particles"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">🖼️ Фотографии · Природа · Усадьба</div>
+    <h1 class="hero-title">
+      Наша
+      <span>галерея</span>
+    </h1>
+    <p class="hero-subtitle">
+      Живописные фотографии усадьбы, угодий и природы
+      Белгородского края — запечатлённые мгновения жизни на земле.
+    </p>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="container">
+    <div class="stats-grid fade-up">
+      <div class="stat-item">
+        <div class="stat-number" data-target="68" data-suffix="">0</div>
+        <div class="stat-label">Фотографий</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="15" data-suffix="+">0+</div>
+        <div class="stat-label">Лет истории</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="1" data-suffix="">0</div>
+        <div class="stat-label">Усадьба</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY SECTION -->
+<div class="gallery-section">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Фотоальбом</div>
+      <h2 class="section-title">Галерея <em>усадьбы</em></h2>
+      <p class="section-desc">
+        Фотохроника жизни хозяйства, природных угодий
+        и красот Белгородской земли.
+      </p>
+    </div>
+
+    <div class="gallery-grid" id="gallery-grid">
+      <!-- Cards generated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">‹</button>
+    <button class="lightbox-nav lightbox-next" onclick="navLightbox(1)">›</button>
+    <img id="lightbox-img" src="" alt="">
+    <div class="lightbox-counter" id="lightbox-counter"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+
+      <div class="footer-col social-column">
+        <div class="footer-logo">🌳Хавелов<span> Продукт</span></div>
+        <div class="social-title">🔗 Наши соцсети</div>
+        <div class="footer-social">
+          <a href="https://t.me/havelovoproduct" target="_blank" class="social-btn telegram" aria-label="Telegram">
+            <svg viewBox="0 0 24 24"><path d="M9.99 15.67 9.8 19.18c.56 0 .8-.24 1.1-.53l2.6-2.5 5.5 4c1 .6 1.7.3 2-.9l3.6-16.9c.3-1.5-.6-2.1-1.5-1.7L1.6 9.3c-1.5.6-1.5 1.4-.3 1.8l5.6 1.7L18.9 6.3c.6-.3 1.1-.1.7.2"/></svg>
+          </a>
+          <a href="https://vk.ru/havelovproduct31" target="_blank" class="social-btn vk">
+            <svg viewBox="0 0 24 24"><path d="M12.65 18.2h-1.3c-4.9 0-7.7-3.3-7.7-8.2V6.6c0-.3.2-.5.5-.5h2.1c.3 0 .5.2.5.5v3.5c0 2.8 1.4 4.4 3.2 4.4h.7V6.6c0-.3.2-.5.5-.5h2.1c.3 0 .5.2.5.5v4.5h.6c.6 0 1.2-.2 1.6-.6.6-.6 1.1-1.6 1.5-2.9.1-.3.3-.4.6-.4h2.2c.4 0 .6.3.5.7-.6 2.2-1.6 3.8-3 4.9.9 1.2 2 2.7 3.1 4.3.2.3 0 .7-.4.7h-2.6c-.3 0-.5-.1-.6-.3-1-1.5-2-2.8-3-3.9h-.6v3.7c0 .3-.2.5-.5.5z"/></svg>
+          </a>
+          <a href="tel:+79087849634" class="social-btn phone" aria-label="Phone">
+            <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.5 2.9 3.7 5.1 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.3 1.3.4 2.7.6 4.2.6.7 0 1.2.5 1.2 1.2V20c0 .7-.5 1.2-1.2 1.2C10.3 21.2 2.8 13.7 2.8 4.2 2.8 3.5 3.3 3 4 3h3.2c.7 0 1.2.5 1.2 1.2 0 1.4.2 2.9.6 4.2.1.4 0 .9-.3 1.2l-2.1 2.2z"/></svg>
+          </a>
+          <a href="mailto:ehavelova@mail.com" class="social-btn email" aria-label="Email">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Контакты</div>
+        <div class="footer-contact">
+          <a href="tel:+79102222571" style="color:inherit;text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='inherit'">8 (910) 2222 571</a><br>
+          <a href="tel:+79102222411" style="color:inherit;text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='inherit'">8 (910) 2222 411</a><br>
+          <a href="tel:+79087849634" style="color:inherit;text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='inherit'">8 (908) 7849 634</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Адрес</div>
+        <div class="footer-address">
+          Белгородская обл.,<br>
+          Валуйский р-н.,<br>
+          с. Двулучное
+        </div>
+      </div>
+
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026. Все права защищены.</span>
+      <span>© 2012–2026 ГКФХ Хавелов Е.П.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── GALLERY IMAGES ──
+  const images = [
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/3155a942-1d2d-4b1f-8df2-811975b8d022/3155a942-1d2d-4b1f-8df2-811975b8d022-16098419.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/fe1f869d-2626-46a9-b14b-6e8616015cd2/fe1f869d-2626-46a9-b14b-6e8616015cd2-16098421.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/1df156ab-5c6c-4fef-90d5-3f17ce350bd7/1df156ab-5c6c-4fef-90d5-3f17ce350bd7-16098420.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/0317fa9e-3d17-4528-a664-1f2a9311da3c/0317fa9e-3d17-4528-a664-1f2a9311da3c-16098423.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/2029a6af-bcc7-41a9-835f-e0ff5ba2a198/2029a6af-bcc7-41a9-835f-e0ff5ba2a198-16098425.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/97ac1ec9-78e7-4ef8-a750-b7d05f540920/97ac1ec9-78e7-4ef8-a750-b7d05f540920-16098424.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/5d393435-1c79-4d12-ac9f-a6b640dcc5c9/5d393435-1c79-4d12-ac9f-a6b640dcc5c9-16098427.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/a4222647-5386-4405-8559-d254931f8d0b/a4222647-5386-4405-8559-d254931f8d0b-16098428.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/cbd78430-8327-4739-8bcb-8211ef830edd/cbd78430-8327-4739-8bcb-8211ef830edd-16098429.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/a115ba2f-aa03-463f-91d1-e196eb021552/a115ba2f-aa03-463f-91d1-e196eb021552-16098431.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/5cb0ccad-29ed-4f12-aab3-5b421bd847ac/5cb0ccad-29ed-4f12-aab3-5b421bd847ac-16098430.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/fb53765e-c17d-4478-afd6-8cadbd14e953/fb53765e-c17d-4478-afd6-8cadbd14e953-16098432.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/c5990c8f-b3c4-4bb8-afd2-cb37f86a3f1a/c5990c8f-b3c4-4bb8-afd2-cb37f86a3f1a-16098434.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/c1dfa6c9-6ec7-4471-b18c-b0dc5955036c/c1dfa6c9-6ec7-4471-b18c-b0dc5955036c-16098433.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/b0c2d9f1-4b73-44ae-960f-783c7f8790bf/b0c2d9f1-4b73-44ae-960f-783c7f8790bf-16098435.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/ee5466a0-57db-4fcb-97f0-f919e3eb2158/ee5466a0-57db-4fcb-97f0-f919e3eb2158-16098436.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/95a912a3-9e55-4476-adfb-ae19624cde8b/95a912a3-9e55-4476-adfb-ae19624cde8b-16098438.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/4c3de7f1-a28d-4289-9056-0d4df49bb2a9/4c3de7f1-a28d-4289-9056-0d4df49bb2a9-16098437.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/6c0608f1-43bb-469d-b7f3-c643dbbf199a/6c0608f1-43bb-469d-b7f3-c643dbbf199a-16098442.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/0df867a8-713c-4036-8eef-d77891d29eb7/0df867a8-713c-4036-8eef-d77891d29eb7-16098441.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/b4874182-5e5a-4b01-b47a-80edaa2d620d/b4874182-5e5a-4b01-b47a-80edaa2d620d-16098440.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/9e979033-e301-4ec0-8356-365ba6aa4cec/9e979033-e301-4ec0-8356-365ba6aa4cec-16098439.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/7147df9f-a54c-4b1c-8825-7b5c9f917a03/7147df9f-a54c-4b1c-8825-7b5c9f917a03-16098443.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/acbe6922-abcc-4ecd-9026-28491efc5590/acbe6922-abcc-4ecd-9026-28491efc5590-16098444.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/d8b0f653-9b7b-4ed1-81ef-3917f032a825/d8b0f653-9b7b-4ed1-81ef-3917f032a825-16098445.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/59072456-756a-4ffc-97c1-f6be07c183da/59072456-756a-4ffc-97c1-f6be07c183da-16098446.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/1d2c0a75-90f6-48cb-b82b-a9780d8df39e/1d2c0a75-90f6-48cb-b82b-a9780d8df39e-16098447.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/0cebbf90-9f48-4636-adac-9fb86effa7aa/0cebbf90-9f48-4636-adac-9fb86effa7aa-16098448.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/3a779c32-da7f-4325-b9b6-1bf75df0c283/3a779c32-da7f-4325-b9b6-1bf75df0c283-16098449.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/4fac732c-01fb-47e3-afc0-5c38981e2b93/4fac732c-01fb-47e3-afc0-5c38981e2b93-16098450.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/f3cd40ee-cf07-44b6-8aa9-d078bfff7a22/f3cd40ee-cf07-44b6-8aa9-d078bfff7a22-16098451.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/5babd5c9-95c1-40f0-95b3-56bcd9564df6/5babd5c9-95c1-40f0-95b3-56bcd9564df6-16098452.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/1527bfb7-7bf9-4bb6-a4c7-822d030d9297/1527bfb7-7bf9-4bb6-a4c7-822d030d9297-16098454.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/28b19225-640c-4fef-ae74-eaed79f10f2e/28b19225-640c-4fef-ae74-eaed79f10f2e-16098453.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/c0310eba-0741-42a7-9c4a-2cd1ccce2892/c0310eba-0741-42a7-9c4a-2cd1ccce2892-16098455.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/1d38e1dc-b8b0-4399-930c-7ca06f07ff60/1d38e1dc-b8b0-4399-930c-7ca06f07ff60-16098456.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/d6e2be8f-b9fd-4e95-9092-584751bc87bd/d6e2be8f-b9fd-4e95-9092-584751bc87bd-16098457.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/f7a23e18-9f11-446a-9922-df3053e8cafa/f7a23e18-9f11-446a-9922-df3053e8cafa-16098458.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/7f3adce9-c8d6-4895-b730-c75913813ab2/7f3adce9-c8d6-4895-b730-c75913813ab2-16098460.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/ddee1d74-ce53-4f8f-ab00-bdc88fb8acad/ddee1d74-ce53-4f8f-ab00-bdc88fb8acad-16098461.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/131de8a4-58a8-4661-8674-9a05be88ec95/131de8a4-58a8-4661-8674-9a05be88ec95-16098462.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/9ea0f967-b1db-41b7-a138-3a97f0e23093/9ea0f967-b1db-41b7-a138-3a97f0e23093-16098459.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/4b61d109-cc74-4260-b04e-cfa339d666c0/4b61d109-cc74-4260-b04e-cfa339d666c0-16098464.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/eaa2e941-11e2-4ac1-873a-84e93b7532ed/eaa2e941-11e2-4ac1-873a-84e93b7532ed-16098463.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/9a69c868-6ae8-4c6e-b986-b89c77cab646/9a69c868-6ae8-4c6e-b986-b89c77cab646-16098465.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/1aa6d9bb-b47b-4c2b-bda3-f513cb86383f/1aa6d9bb-b47b-4c2b-bda3-f513cb86383f-16098466.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/f7ec08c4-2b8f-4819-abfb-901340a72fba/f7ec08c4-2b8f-4819-abfb-901340a72fba-16098467.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/c08abf6e-559e-4915-91ee-1020e91c25ae/c08abf6e-559e-4915-91ee-1020e91c25ae-16098468.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/c4b28f3d-c090-48b4-a350-eae4ce158205/c4b28f3d-c090-48b4-a350-eae4ce158205-16098470.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/eb8b4e2e-34fc-4f69-ae87-aac41c7645a9/eb8b4e2e-34fc-4f69-ae87-aac41c7645a9-16098469.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/87dc2df7-4478-4f33-b4b6-ae2066497682/87dc2df7-4478-4f33-b4b6-ae2066497682-16098472.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/01c7fe39-994e-4114-8cd0-04c669387602/01c7fe39-994e-4114-8cd0-04c669387602-16098471.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/9b587d54-683e-402a-b66c-58e0b02fc724/9b587d54-683e-402a-b66c-58e0b02fc724-16098473.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/fe71368b-d947-459d-bd3a-128b97f87bea/fe71368b-d947-459d-bd3a-128b97f87bea-16098474.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/c5f6c377-ccc6-4888-8b54-32f2e23a2af1/c5f6c377-ccc6-4888-8b54-32f2e23a2af1-16098475.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/d095e003-639a-4eec-abb0-0636c7ab0f6b/d095e003-639a-4eec-abb0-0636c7ab0f6b-16098476.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/5296cd50-107b-4852-82c8-60b749bfb9af/5296cd50-107b-4852-82c8-60b749bfb9af-16098477.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/753fde73-16ee-4a5a-bee7-0c17de262220/753fde73-16ee-4a5a-bee7-0c17de262220-16098478.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/4b3114ba-605b-400e-830a-b6016bdf368f/4b3114ba-605b-400e-830a-b6016bdf368f-16098479.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/3d61764d-4c90-47f8-9e6d-6041fc48ea4e/3d61764d-4c90-47f8-9e6d-6041fc48ea4e-16098482.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/cc7686e3-1b67-4085-8075-66f443b41f60/cc7686e3-1b67-4085-8075-66f443b41f60-16098480.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/67436f8f-a1e8-4a89-84ea-f1a1808a54e5/67436f8f-a1e8-4a89-84ea-f1a1808a54e5-16098481.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/9a31b22a-7e46-44ea-9822-0f1743d1126f/9a31b22a-7e46-44ea-9822-0f1743d1126f-16098483.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/a3ff6dd9-aef7-4302-82fa-e5f13500e9b0/a3ff6dd9-aef7-4302-82fa-e5f13500e9b0-16098486.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/03c593e2-65a1-423b-b1b6-092a2fb753c9/03c593e2-65a1-423b-b1b6-092a2fb753c9-16098484.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/09dc2c60-a941-4466-a24c-77b5a0626c6c/09dc2c60-a941-4466-a24c-77b5a0626c6c-16098485.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/0abc0301-77ab-4247-8a80-0491029d05c0/0abc0301-77ab-4247-8a80-0491029d05c0-16098487.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/d223a68c-950f-4367-ac36-ac7f6f43c04e/d223a68c-950f-4367-ac36-ac7f6f43c04e-16098488.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/01870917-645f-4323-b02a-463c4249f2dc/01870917-645f-4323-b02a-463c4249f2dc-16098489.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/03500144-2e12-46a9-9fd6-fae450d74ce1/03500144-2e12-46a9-9fd6-fae450d74ce1-16098490.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/24747190-f6fb-43d5-87dd-993117749b9e/24747190-f6fb-43d5-87dd-993117749b9e-16098491.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/e0f7f6fe-fcd8-4f65-90b4-cbda243a8ac5/e0f7f6fe-fcd8-4f65-90b4-cbda243a8ac5-16098493.jpeg',
+    'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/cbe8d75f-49c0-4b79-8c17-0d3310aa8d9c/cbe8d75f-49c0-4b79-8c17-0d3310aa8d9c-16098492.jpeg',
+  ];
+
+  // ── BUILD GALLERY ──
+  const grid = document.getElementById('gallery-grid');
+  images.forEach((src, i) => {
+    const delay = (i % 20 * 0.05).toFixed(2);
+    grid.innerHTML += `
+      <div class="gallery-card" onclick="openLightbox(${i})" style="transition-delay:${delay}s">
+        <div class="gallery-card-img-wrap">
+          <img src="${src}" alt="Фото ${i + 1}" loading="lazy">
+          <div class="gallery-card-overlay">
+            <div class="gallery-card-zoom">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  });
+
+  // ── PARTICLES ──
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 28; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.setProperty('--dur', (6 + Math.random() * 8) + 's');
+    p.style.setProperty('--delay', (Math.random() * 8) + 's');
+    p.style.width = p.style.height = (1 + Math.random() * 2.5) + 'px';
+    container.appendChild(p);
+  }
+
+  // ── INTERSECTION OBSERVER ──
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.gallery-card, .fade-up').forEach(el => io.observe(el));
+
+  // ── COUNTER ANIMATION ──
+  function animateCounter(el) {
+    if (el.dataset.animated) return;
+    el.dataset.animated = 'true';
+
+    const target = parseInt(el.dataset.target, 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1600;
+    const startTime = performance.now();
+
+    const ease = t => t >= 1 ? 1 : 1 - Math.pow(2, -10 * t);
+
+    function tick(now) {
+      const progress = Math.min((now - startTime) / duration, 1);
+      el.textContent = Math.round(ease(progress) * target) + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  const statsGrid = document.querySelector('.stats-grid');
+  if (statsGrid) {
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !statsGrid.dataset.counted) {
+          statsGrid.dataset.counted = 'true';
+          setTimeout(() => {
+            document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+              animateCounter(el);
+            });
+          }, 850);
+        }
+      });
+    }, { threshold: 0.3 });
+    statsObserver.observe(statsGrid);
+  }
+
+  // ── LIGHTBOX ──
+  let currentIdx = 0;
+
+  function openLightbox(idx) {
+    currentIdx = idx;
+    renderLightbox();
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function renderLightbox() {
+    document.getElementById('lightbox-img').src = images[currentIdx];
+    document.getElementById('lightbox-counter').textContent =
+      (currentIdx + 1) + ' / ' + images.length;
+  }
+
+  function navLightbox(dir) {
+    currentIdx = (currentIdx + dir + images.length) % images.length;
+    const img = document.getElementById('lightbox-img');
+    img.style.opacity = 0;
+    setTimeout(() => {
+      renderLightbox();
+      img.style.transition = 'opacity 0.25s';
+      img.style.opacity = 1;
+    }, 120);
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeLightboxOutside(e) {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    const lb = document.getElementById('lightbox');
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft')  navLightbox(-1);
+    if (e.key === 'ArrowRight') navLightbox(1);
+  });
+
+  // Touch swipe support
+  (function() {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const lb = document.getElementById('lightbox');
+
+    lb.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    lb.addEventListener('touchend', (e) => {
+      if (!lb.classList.contains('open')) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+        navLightbox(dx < 0 ? 1 : -1);
+      }
+    }, { passive: true });
+  })();
+</script>
+<script>
+
+// ── PRELOADER ──
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const pl = document.getElementById('preloader');
+    if (pl) pl.classList.add('hidden');
+  }, 1200);
+});
+
+// ── PARTICLES BG ──
+(function(){
+  const wrap = document.getElementById('particles-bg');
+  if (!wrap) return;
+  wrap.className = 'particles-bg-wrap';
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle-bg';
+    p.style.left = Math.random() * 100 + '%';
+    const sz = (4 + Math.random() * 6) + 'px';
+    p.style.width = sz; p.style.height = sz;
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    wrap.appendChild(p);
+  }
+})();
+
+
+// ── NAV SCROLL ──
+(function(){
+  const nav = document.querySelector('nav');
+  if (!nav) return;
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 80));
+})();
+
+// ── HERO SPARKLES ──
+(function(){
+  const wrap = document.getElementById('hero-sparkle');
+  if (!wrap) return;
+  for (let i = 0; i < 22; i++) {
+    const s = document.createElement('div');
+    s.className = 'hero-spark';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.bottom = (Math.random() * 30) + '%';
+    const sz = (2 + Math.random() * 3) + 'px';
+    s.style.width = sz; s.style.height = sz;
+    s.style.animationDuration = (5 + Math.random() * 8) + 's';
+    s.style.animationDelay = (Math.random() * 6) + 's';
+    wrap.appendChild(s);
+  }
+})();
+
+</script>
+
+<!-- PRIVACY BANNER -->
+<div id="privacy-banner" class="privacy-banner">
+  <div class="privacy-inner">
+    <div class="privacy-text">
+      <h3>Уведомление о конфиденциальности</h3>
+      <p>Продолжая использование сайта, вы подтверждаете ознакомление с Политикой конфиденциальности.</p>
+      <p>Сайт носит исключительно информационный характер и не осуществляет сбор и обработку персональных данных пользователей.</p>
+    </div>
+    <div class="privacy-actions">
+      <a href="privacy.html" class="privacy-more">Подробнее</a>
+      <button id="privacy-accept" class="privacy-btn">Понятно</button>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const banner = document.getElementById("privacy-banner");
+  const btn = document.getElementById("privacy-accept");
+  if (banner && btn) {
+    if (!localStorage.getItem("privacyAccepted")) {
+      setTimeout(() => banner.classList.add("show"), 1400);
+    }
+    btn.addEventListener("click", function () {
+      banner.classList.remove("show");
+      localStorage.setItem("privacyAccepted", "true");
+    });
+  }
+});
+</script>
+
+</body>
+</html>
