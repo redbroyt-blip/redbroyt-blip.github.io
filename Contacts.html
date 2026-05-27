@@ -446,7 +446,14 @@
     .contact-block-lines a,
     .contact-block-lines a:link,
     .contact-block-lines a:visited,
-    .contact-block-lines a:active {
+    .contact-block-lines a:active,
+    .contact-block-lines a:any-link {
+      color: var(--text-light) !important;
+      -webkit-text-fill-color: var(--text-light) !important;
+      text-decoration: none !important;
+    }
+    /* Дополнительное переопределение для Safari iOS tel: ссылок */
+    a[href^="tel"] {
       color: var(--text-light) !important;
       -webkit-text-fill-color: var(--text-light) !important;
       text-decoration: none !important;
@@ -931,7 +938,7 @@
   <div class="container">
     <div class="section-header fade-up">
       <div class="section-eyebrow">Способы связи</div>
-      <h2 class="section-title">Выберите удобный <em>канал</em></h2>
+      <h2 class="section-title">Выберите удобный <em>способ</em></h2>
     </div>
     <div class="divider fade-up"><div class="divider-gem"></div></div>
     <div class="channels-grid">
@@ -1220,6 +1227,19 @@ window.addEventListener('load', () => {
     // parallax hero bg
     const heroImg = document.querySelector('.hero-img');
     if (heroImg) heroImg.style.transform = `translateY(${window.scrollY * 0.3}px) scale(1.0)`;
+  });
+})();
+
+// ── TELEGRAM MOBILE FIX ──
+(function(){
+  var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  if (!isMobile) return;
+  document.querySelectorAll('a[href*="t.me"]').forEach(function(link) {
+    link.removeAttribute('target');
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = link.getAttribute('href');
+    });
   });
 })();
 
