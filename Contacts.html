@@ -265,7 +265,7 @@
 
   /* ─── CONTACT CHANNELS SECTION ─── */
   .channels-section {
-    padding: 90px 0 60px;
+    padding: 40px 0 10px;
     background: linear-gradient(135deg, #162a16 0%, #1f3a1f 50%, #162a16 100%);
     border-top: 1px solid rgba(201,168,76,0.15);
     border-bottom: 1px solid rgba(201,168,76,0.15);
@@ -275,7 +275,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    margin-top: 56px;
+    margin-top: 0;
   }
 
   .channel-card {
@@ -371,7 +371,7 @@
 
   /* ─── CONTACTS SECTION ─── */
   .contacts-section {
-    padding: 40px 0 90px;
+    padding: 10px 0 90px;
     background: var(--forest-deep);
   }
 
@@ -429,15 +429,28 @@
     line-height: 1.9;
   }
 
-  .contact-block-lines a {
+  .contact-block-lines a,
+  .contact-block-lines a:link,
+  .contact-block-lines a:visited {
     color: var(--text-light) !important;
     -webkit-text-fill-color: var(--text-light) !important;
-    text-decoration: none;
+    text-decoration: none !important;
     transition: color 0.3s;
+    -webkit-tap-highlight-color: transparent;
   }
   .contact-block-lines a:hover {
     color: var(--gold) !important;
     -webkit-text-fill-color: var(--gold) !important;
+  }
+  @media (max-width: 900px) {
+    .contact-block-lines a,
+    .contact-block-lines a:link,
+    .contact-block-lines a:visited,
+    .contact-block-lines a:active {
+      color: var(--text-light) !important;
+      -webkit-text-fill-color: var(--text-light) !important;
+      text-decoration: none !important;
+    }
   }
 
   /* ─── MAP HINT ─── */
@@ -916,6 +929,11 @@
 <!-- CHANNELS -->
 <section class="channels-section">
   <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Способы связи</div>
+      <h2 class="section-title">Выберите удобный <em>канал</em></h2>
+    </div>
+    <div class="divider fade-up"><div class="divider-gem"></div></div>
     <div class="channels-grid">
 
       <!-- Telegram -->
