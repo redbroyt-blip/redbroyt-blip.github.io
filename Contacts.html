@@ -650,6 +650,12 @@
     font-size: 12px; opacity: 0.5;
   }
 
+  @media (max-width: 768px) {
+    .footer-bottom {
+      flex-direction: column; align-items: center; gap: 6px; text-align: center;
+    }
+  }
+
   .fade-up {
     opacity: 0; transform: translateY(40px); transition: 0.8s ease;
   }
@@ -1231,14 +1237,28 @@ window.addEventListener('load', () => {
 })();
 
 // ── TELEGRAM MOBILE FIX ──
+function openTelegram(e, username) {
+  e.preventDefault();
+  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) {
+    var tgApp = 'tg://resolve?domain=' + username;
+    var tgWeb = 'https://t.me/' + username;
+    var start = Date.now();
+    setTimeout(function() {
+      if (Date.now() - start < 1500) {
+        window.open(tgWeb, '_blank');
+      }
+    }, 800);
+    window.location.href = tgApp;
+  } else {
+    window.open('https://t.me/' + username, '_blank');
+  }
+}
 (function(){
-  var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-  if (!isMobile) return;
   document.querySelectorAll('a[href*="t.me"]').forEach(function(link) {
     link.removeAttribute('target');
     link.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.location.href = link.getAttribute('href');
+      openTelegram(e, 'havelovoproduct');
     });
   });
 })();
