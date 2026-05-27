@@ -842,7 +842,6 @@ footer::before {
   background: radial-gradient(circle, rgba(255,255,255,0.2), transparent 60%);
   opacity: 0;
   transition: 0.3s;
-  pointer-events: none;
 }
 
 .social-btn:hover::after {
@@ -1788,66 +1787,9 @@ footer::before {
 </section>
 
 
-<!-- ORDER -->
-<section class="order-section">
-  <div class="container">
-    <div class="section-header fade-up">
-      <div class="section-eyebrow">Заказать</div>
-      <h2 class="section-title">Быстрый <em>заказ</em></h2>
-      <p style="font-family:'Cormorant Garamond',serif; font-size:20px; color:var(--text-light); margin-top:16px; max-width:480px; margin-left:auto; margin-right:auto; line-height:1.6;">
-        Выберите товар и удобный способ — оформление займёт пару минут.
-      </p>
-    </div>
-
-
-
-    <div class="order-grid">
-      <a href="https://www.wildberries.ru/catalog/825259435/detail.aspx" class="order-card" target="_blank">
-        <div class="order-card-info">
-          <div class="order-card-name">Крем-мёд с черной смородиной</div>
-          <div class="order-card-platform">Wildberries</div>
-        </div>
-        <div class="order-card-arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
-      </a>
-
-      <a href="https://www.wildberries.ru/catalog/825229378/detail.aspx" class="order-card" target="_blank">
-        <div class="order-card-info">
-          <div class="order-card-name">Крем-мёд с малиной</div>
-          <div class="order-card-platform">Wildberries</div>
-        </div>
-        <div class="order-card-arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
-      </a>
-
-      <a href="https://www.wildberries.ru/catalog/843439523/detail.aspx" class="order-card" target="_blank">
-        <div class="order-card-info">
-          <div class="order-card-name">Иван-чай и наборы</div>
-          <div class="order-card-platform">Wildberries</div>
-        </div>
-        <div class="order-card-arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
-      </a>
-
-      <a href="Contacts.html" class="order-card">
-        <div class="order-card-info">
-          <div class="order-card-name">Саженцы фундука и орехи</div>
-          <div class="order-card-platform">Прямой заказ</div>
-        </div>
-        <div class="order-card-arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<div style="text-align:center; margin:20px 0;">
+<div style="text-align:center; margin:40px 0;">
   <a href="Contacts.html" class="product-card-btn">
-    Консультация и сбособы заказа
+    Консультация и способы заказа
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
       <path d="M5 12h14M12 5l7 7-7 7"/>
     </svg>
@@ -2044,6 +1986,21 @@ document.addEventListener("DOMContentLoaded", function () {
     s.style.animationDelay = (Math.random() * 7) + 's';
     wrap.appendChild(s);
   }
+})();
+</script>
+
+<!-- TELEGRAM MOBILE FIX -->
+<script>
+(function(){
+  var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  if (!isMobile) return;
+  document.querySelectorAll('a[href*="t.me"]').forEach(function(link) {
+    link.removeAttribute('target');
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = link.getAttribute('href');
+    });
+  });
 })();
 </script>
 
