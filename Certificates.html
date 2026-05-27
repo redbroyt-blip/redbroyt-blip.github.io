@@ -711,7 +711,6 @@
     content: ""; position: absolute; inset: 0;
     background: radial-gradient(circle, rgba(255,255,255,0.2), transparent 60%);
     opacity: 0; transition: 0.3s;
-    pointer-events: none;
   }
   .social-btn:hover::after { opacity: 1; }
 
@@ -1368,7 +1367,7 @@
         <div class="footer-logo">🌳Хавелов<span> Продукт</span></div>
         <div class="social-title">🔗 Наши соцсети</div>
         <div class="footer-social">
-          <a href="https://t.me/havelovoproduct" target="_blank" class="social-btn telegram" aria-label="Telegram">
+          <a href="https://t.me/havelovoproduct" class="social-btn telegram" aria-label="Telegram" onclick="openTelegram(event,'havelovoproduct')">
             <svg viewBox="0 0 24 24"><path d="M9.99 15.67 9.8 19.18c.56 0 .8-.24 1.1-.53l2.6-2.5 5.5 4c1 .6 1.7.3 2-.9l3.6-16.9c.3-1.5-.6-2.1-1.5-1.7L1.6 9.3c-1.5.6-1.5 1.4-.3 1.8l5.6 1.7L18.9 6.3c.6-.3 1.1-.1.7.2"/></svg>
           </a>
           <a href="https://vk.ru/havelovproduct31" target="_blank" class="social-btn vk">
@@ -1599,6 +1598,27 @@ window.addEventListener('load', () => {
   if (!nav) return;
   window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 80));
 })();
+
+// ── TELEGRAM MOBILE REDIRECT ──
+function openTelegram(e, username) {
+  e.preventDefault();
+  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) {
+    // Пробуем открыть нативное приложение
+    var tgApp = 'tg://resolve?domain=' + username;
+    var tgWeb = 'https://t.me/' + username;
+    var start = Date.now();
+    // Если приложение не открылось через 800мс — открываем браузер
+    setTimeout(function() {
+      if (Date.now() - start < 1500) {
+        window.open(tgWeb, '_blank');
+      }
+    }, 800);
+    window.location.href = tgApp;
+  } else {
+    window.open('https://t.me/' + username, '_blank');
+  }
+}
 
 </script>
 
