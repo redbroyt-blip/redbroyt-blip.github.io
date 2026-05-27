@@ -599,9 +599,9 @@
     .filter-bar { flex-wrap: wrap; gap: 6px; padding: 0 12px; }
     .filter-btn { font-size: 10px; padding: 8px 12px; }
     .lightbox-prev, .lightbox-next { display: flex; width: 40px; height: 40px; font-size: 24px; }
-    .lightbox-prev { left: -44px; }
-    .lightbox-next { right: -44px; }
-    .lightbox-inner { max-width: calc(100vw - 100px); }
+    .lightbox-prev { left: 8px; }
+    .lightbox-next { right: 8px; }
+    .lightbox-inner { max-width: 100vw; padding: 0 56px; }
     .footer-social { flex-wrap: wrap; gap: 10px; }
     .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
   }
@@ -847,7 +847,7 @@
           <a href="tel:+79087849634" class="social-btn phone" aria-label="Phone">
             <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.5 2.9 3.7 5.1 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.3 1.3.4 2.7.6 4.2.6.7 0 1.2.5 1.2 1.2V20c0 .7-.5 1.2-1.2 1.2C10.3 21.2 2.8 13.7 2.8 4.2 2.8 3.5 3.3 3 4 3h3.2c.7 0 1.2.5 1.2 1.2 0 1.4.2 2.9.6 4.2.1.4 0 .9-.3 1.2l-2.1 2.2z"/></svg>
           </a>
-          <a href="mailto:havelovproduct@gmail.com" class="social-btn email" aria-label="Email">
+          <a href="mailto:ehavelova@mail.com" class="social-btn email" aria-label="Email">
             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"/></svg>
           </a>
         </div>
@@ -1041,20 +1041,25 @@
 
   // ── BUILD GALLERY ──
   const grid = document.getElementById('gallery-grid');
+  const fragment = document.createDocumentFragment();
   images.forEach((src, i) => {
     const delay = (i % 20 * 0.05).toFixed(2);
-    grid.innerHTML += `
-      <div class="gallery-card" onclick="openLightbox(${i})" style="transition-delay:${delay}s">
-        <div class="gallery-card-img-wrap">
-          <img src="${src}" alt="Фото ${i + 1}" loading="lazy">
-          <div class="gallery-card-overlay">
-            <div class="gallery-card-zoom">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
-            </div>
+    const card = document.createElement('div');
+    card.className = 'gallery-card';
+    card.setAttribute('onclick', `openLightbox(${i})`);
+    card.style.transitionDelay = delay + 's';
+    card.innerHTML = `
+      <div class="gallery-card-img-wrap">
+        <img src="${src}" alt="Фото ${i + 1}" loading="lazy">
+        <div class="gallery-card-overlay">
+          <div class="gallery-card-zoom">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
           </div>
         </div>
       </div>`;
+    fragment.appendChild(card);
   });
+  grid.appendChild(fragment);
 
   // ── PARTICLES ──
   const container = document.getElementById('particles');
@@ -1180,12 +1185,14 @@
 <script>
 
 // ── PRELOADER ──
-window.addEventListener('load', () => {
-  setTimeout(() => {
+(function() {
+  function hidePreloader() {
     const pl = document.getElementById('preloader');
     if (pl) pl.classList.add('hidden');
-  }, 1200);
-});
+  }
+  window.addEventListener('load', () => setTimeout(hidePreloader, 800));
+  setTimeout(hidePreloader, 3000);
+})();
 
 // ── PARTICLES BG ──
 (function(){
