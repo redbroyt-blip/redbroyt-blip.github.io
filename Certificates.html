@@ -902,6 +902,86 @@
   }
   .privacy-more:hover { background: rgba(255,255,255,0.08); }
 
+
+  /* ═══════════════════════════════════════════
+     UNIFIED NAV — shared across all pages
+  ═══════════════════════════════════════════ */
+  #main-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    height: 80px; padding: 0 24px;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    background: rgba(10, 28, 10, 0.92);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(201,168,76,0.18);
+    box-shadow: 0 2px 24px rgba(0,0,0,0.35);
+    transition: background 0.4s ease, border-color 0.4s ease;
+  }
+  #main-nav.scrolled {
+    background: rgba(0,0,0,0.55);
+    border-bottom-color: rgba(255,255,255,0.06);
+    box-shadow: 0 2px 32px rgba(0,0,0,0.5);
+  }
+  #main-nav .nav-logo { justify-self: start; text-decoration: none; display: flex; align-items: center; }
+  #main-nav .nav-logo img { height: 58px; transition: 0.3s ease; display: block; }
+  #main-nav .nav-logo:hover img { transform: scale(1.06); filter: drop-shadow(0 0 8px rgba(212,175,55,0.5)); }
+  .nav-tree-wrap {
+    justify-self: center; cursor: pointer; position: relative;
+    width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;
+    overflow: visible;
+  }
+  .nav-tree-svg {
+    width: 44px; height: 44px;
+    transition: transform 0.35s ease, filter 0.35s ease;
+    animation: treeSway 4s ease-in-out infinite;
+  }
+  @keyframes treeSway {
+    0%,100% { transform: rotate(0deg) scale(1); }
+    25%      { transform: rotate(1.5deg) scale(1.02); }
+    75%      { transform: rotate(-1.5deg) scale(1.02); }
+  }
+  .nav-tree-wrap:hover .nav-tree-svg { animation: none; transform: scale(1.12); filter: drop-shadow(0 0 10px rgba(46,204,113,0.6)); }
+  .nav-particle {
+    position: absolute; pointer-events: none;
+    animation: navFall linear infinite; opacity: 0;
+  }
+  @keyframes navFall {
+    0%   { transform: translateY(0) translateX(0) rotate(0deg) scale(1); opacity: 0; }
+    10%  { opacity: 0.9; }
+    80%  { opacity: 0.5; }
+    100% { transform: translateY(60px) translateX(var(--tx,10px)) rotate(360deg) scale(0.4); opacity: 0; }
+  }
+  #main-nav .nav-right { justify-self: end; }
+  .nav-home-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+    text-decoration: none; color: #111; font-family: 'Montserrat', sans-serif;
+    border-radius: 14px; border: 2px solid #ffd700;
+    background: linear-gradient(135deg, #ffd700 0%, #d4af37 50%, #ffea70 100%);
+    box-shadow: 0 0 18px rgba(255,215,0,0.4), 0 4px 14px rgba(0,0,0,0.25);
+    position: relative; overflow: hidden; white-space: nowrap;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: homeBtn-glow 3s ease-in-out infinite;
+  }
+  @keyframes homeBtn-glow {
+    0%,100% { box-shadow: 0 0 16px rgba(255,215,0,0.4), 0 4px 14px rgba(0,0,0,0.2); }
+    50%     { box-shadow: 0 0 30px rgba(255,215,0,0.75), 0 6px 20px rgba(0,0,0,0.3); }
+  }
+  .nav-home-btn:hover { transform: translateY(-3px) scale(1.06); }
+  .nav-home-btn:active { transform: scale(0.96); }
+  .nav-home-btn svg { flex-shrink: 0; }
+  .nav-home-shine {
+    position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+    animation: homeBtn-shine 2.5s ease-in-out infinite;
+  }
+  @keyframes homeBtn-shine { 0%{left:-100%} 40%{left:130%} 100%{left:130%} }
+  @media (max-width: 600px) {
+    #main-nav { padding: 0 14px; height: 68px; }
+    #main-nav .nav-logo img { height: 44px; }
+    .nav-home-btn { padding: 8px 14px; font-size: 11px; }
+    .nav-tree-svg { width: 36px; height: 36px; }
+  }
+
 </style>
 </head>
 <body>
@@ -917,12 +997,24 @@
 
 
 <!-- NAV -->
-<!-- NAV -->
 <nav id="main-nav">
   <a class="nav-logo" href="Home.html">
-    <img src="https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/865f6ee3-32b3-46be-a01d-76eecb7e3296/865f6ee3-32b3-46be-a01d-76eecb7e3296-16098362.png" alt="logo">
+    <img src="https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/865f6ee3-32b3-46be-a01d-76eecb7e3296/865f6ee3-32b3-46be-a01d-76eecb7e3296-16098362.png" alt="logo" loading="lazy" decoding="async">
   </a>
-  <div class="nav-center">🌳</div>
+  <div class="nav-tree-wrap" id="navTree" title="Перейти к подвалу">
+    <svg class="nav-tree-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect x="29" y="44" width="6" height="14" rx="2" fill="#8B5E3C"/>
+      <ellipse cx="32" cy="38" rx="16" ry="10" fill="#2d7a3a"/>
+      <ellipse cx="32" cy="30" rx="13" ry="9" fill="#38a047"/>
+      <ellipse cx="32" cy="22" rx="10" ry="8" fill="#4cbb5c"/>
+      <ellipse cx="32" cy="16" rx="7"  ry="6" fill="#62d46e"/>
+      <circle cx="22" cy="34" r="2.2" fill="#e74c3c"/>
+      <circle cx="40" cy="32" r="2.0" fill="#e74c3c"/>
+      <circle cx="27" cy="27" r="1.8" fill="#c0392b"/>
+      <circle cx="37" cy="25" r="1.6" fill="#e74c3c"/>
+      <circle cx="32" cy="37" r="1.5" fill="#c0392b"/>
+    </svg>
+  </div>
   <div class="nav-right">
     <a href="index.html" class="nav-home-btn">
       <span class="nav-home-shine"></span>
@@ -1376,7 +1468,7 @@
           <a href="tel:+79087849634" class="social-btn phone" aria-label="Phone">
             <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.5 2.9 3.7 5.1 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.3 1.3.4 2.7.6 4.2.6.7 0 1.2.5 1.2 1.2V20c0 .7-.5 1.2-1.2 1.2C10.3 21.2 2.8 13.7 2.8 4.2 2.8 3.5 3.3 3 4 3h3.2c.7 0 1.2.5 1.2 1.2 0 1.4.2 2.9.6 4.2.1.4 0 .9-.3 1.2l-2.1 2.2z"/></svg>
           </a>
-          <a href="mailto:havelovproduct@mail.com" class="social-btn email" aria-label="Email">
+          <a href="mailto:ehavelova@mail.com" class="social-btn email" aria-label="Email">
             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"/></svg>
           </a>
         </div>
@@ -1567,12 +1659,11 @@
 <script>
 
 // ── PRELOADER ──
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    const pl = document.getElementById('preloader');
-    if (pl) pl.classList.add('hidden');
-  }, 1200);
-});
+(function(){
+  function hidePreloader(){var pl=document.getElementById('preloader');if(pl)pl.classList.add('hidden');}
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',hidePreloader);}else{hidePreloader();}
+  setTimeout(hidePreloader,1500);
+})();
 
 // ── PARTICLES BG ──
 (function(){
@@ -1652,5 +1743,48 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<script>
+
+// ── UNIFIED NAV ──
+(function(){
+  var nav = document.getElementById('main-nav');
+  if (nav) {
+    window.addEventListener('scroll', function(){ nav.classList.toggle('scrolled', window.scrollY > 80); });
+  }
+  var treeWrap = document.getElementById('navTree');
+  if (!treeWrap) return;
+  treeWrap.addEventListener('click', function(){
+    var footer = document.querySelector('footer');
+    if (footer) footer.scrollIntoView({ behavior: 'smooth' });
+  });
+  var colors = ['#e74c3c','#c0392b','#2ecc71','#f1c40f','#e67e22','#27ae60'];
+  function spawnParticle() {
+    var p = document.createElement('div');
+    p.className = 'nav-particle';
+    var isLeaf = Math.random() > 0.4;
+    var size = isLeaf ? (6 + Math.random()*5) : (4 + Math.random()*4);
+    var color = colors[Math.floor(Math.random()*colors.length)];
+    var tx = (Math.random()*40 - 20);
+    p.style.cssText = [
+      'width:'+size+'px',
+      'height:'+(isLeaf?size*1.5:size)+'px',
+      'background:'+color,
+      'border-radius:'+(isLeaf?'50% 0 50% 0':'50%'),
+      'top:'+(20+Math.random()*10)+'px',
+      'left:'+(16+Math.random()*20)+'px',
+      '--tx:'+tx+'px',
+      'animation-duration:'+(1.2+Math.random()*1.2)+'s',
+      'animation-delay:'+(Math.random()*0.4)+'s'
+    ].join(';');
+    treeWrap.appendChild(p);
+    setTimeout(function(){ if(p.parentNode) p.parentNode.removeChild(p); }, 2500);
+  }
+  setInterval(spawnParticle, 600);
+  treeWrap.addEventListener('mouseenter', function(){
+    for(var i=0;i<8;i++) setTimeout(spawnParticle, i*60);
+  });
+})();
+
+</script>
 </body>
 </html>
