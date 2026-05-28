@@ -982,6 +982,55 @@
     .nav-tree-svg { width: 36px; height: 36px; }
   }
 
+  /* ─── PRESS CARDS ─── */
+  .press-card {
+    display: flex; flex-direction: column;
+    background: linear-gradient(135deg, rgba(22,42,22,0.85) 0%, rgba(14,28,14,0.95) 100%);
+    border: 1px solid rgba(201,168,76,0.18);
+    border-radius: 18px;
+    padding: 32px 28px;
+    text-decoration: none;
+    color: inherit;
+    position: relative; overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+  .press-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.5), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .press-card:hover {
+    border-color: rgba(201,168,76,0.45);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.1);
+  }
+  .press-card:hover::before { opacity: 1; }
+  .press-card-source {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 18px;
+  }
+  .press-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700; line-height: 1.3;
+    color: var(--white); margin-bottom: 16px;
+  }
+  .press-card-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px; line-height: 1.65;
+    color: var(--text-light); flex: 1;
+    margin-bottom: 28px;
+  }
+  .press-card-arrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold);
+    border-top: 1px solid rgba(201,168,76,0.2); padding-top: 20px;
+    transition: gap 0.25s;
+  }
+  .press-card:hover .press-card-arrow { gap: 14px; }
+
 </style>
 </head>
 <body>
@@ -1089,8 +1138,8 @@
     </button>
   </div>
   <div class="tab-row-bottom">
-    <button class="tab-btn" onclick="switchTab('certificates', this)">
-      📜 Сертификаты
+    <button class="tab-btn" onclick="switchTab('press', this)">
+      📰 В прессе
     </button>
   </div>
 </div>
@@ -1406,47 +1455,52 @@
   </div>
 </div>
 
-<!-- ══════════ CERTIFICATES PANEL ══════════ -->
-<div class="tab-panel" id="tab-certificates">
+
+<!-- ══════════ PRESS PANEL ══════════ -->
+<div class="tab-panel" id="tab-press">
   <div class="container">
     <div class="section-header fade-up">
-      <div class="section-eyebrow">Документы</div>
-      <h2 class="section-title">Сертификаты и <em>допуски</em></h2>
+      <div class="section-eyebrow">Публикации в СМИ</div>
+      <h2 class="section-title">О нас <em>пишут</em></h2>
       <p class="section-desc">
-        Официальные сертификаты, подтверждающие квалификацию
-        и профессиональные компетенции.
+        История семьи Хавеловых и их орехового сада — в репортажах федеральных и региональных изданий.
       </p>
     </div>
 
-    <div class="books-grid" id="certificates-grid">
-      <div class="book-card" onclick="openLightbox('certificates', 0)">
-        <div class="book-card-img-wrap">
-          <img src="https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1130480/ce0d36d3-521d-47bf-9e83-b2c9054ed9c5/ce0d36d3-521d-47bf-9e83-b2c9054ed9c5-15767221.jpeg" alt="Сертификат 1">
-          <div class="book-card-overlay">
-            <div class="book-card-zoom">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
-            </div>
-          </div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; max-width: 900px; margin: 0 auto;">
+
+      <!-- Карточка 1: Минсельхоз -->
+      <a href="https://mcx.gov.ru/press-service/regions/lyudi-truda-belgorodskiy-sadovod-evgeniy-khavelov/" target="_blank" rel="noopener" class="press-card fade-up">
+        <div class="press-card-source">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.7"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+          Минсельхоз России
         </div>
-        <div class="book-card-footer">
-          <div class="book-card-dot"></div>
-          <div class="book-card-label">Сертификат</div>
+        <div class="press-card-title">«Люди труда: белгородский садовод Евгений Хавелов»</div>
+        <p class="press-card-desc">
+          Федеральный портал Министерства сельского хозяйства России — о пути белгородского садовода, его хозяйстве и вкладе в развитие отечественного садоводства.
+        </p>
+        <div class="press-card-arrow">
+          Читать статью
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </div>
-      </div>
-      <div class="book-card" onclick="openLightbox('certificates', 1)">
-        <div class="book-card-img-wrap">
-          <img src="https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1130480/1f174933-330b-49fc-be5a-a3a5139091c4/1f174933-330b-49fc-be5a-a3a5139091c4-15767244.jpeg" alt="Сертификат 2">
-          <div class="book-card-overlay">
-            <div class="book-card-zoom">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
-            </div>
-          </div>
+      </a>
+
+      <!-- Карточка 2: Валуйская звезда -->
+      <a href="https://val-zvezda31.ru/articles/ekonomika/2020-07-08/orehovoe-tsarstvo-havelovyh-valuyskaya-semya-proshla-vse-etapy-podgotovki-k-zakladke-sada-32569" target="_blank" rel="noopener" class="press-card fade-up">
+        <div class="press-card-source">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.7"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8V6Z"/></svg>
+          Валуйская звезда · 8 июля 2020
         </div>
-        <div class="book-card-footer">
-          <div class="book-card-dot"></div>
-          <div class="book-card-label">Сертификат</div>
+        <div class="press-card-title">«Ореховое царство Хавеловых»</div>
+        <p class="press-card-desc">
+          Репортаж о том, как валуйская семья прошла все этапы подготовки к закладке орехового сада — от первой идеи до выхода на полноценное производство.
+        </p>
+        <div class="press-card-arrow">
+          Читать статью
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </div>
-      </div>
+      </a>
+
     </div>
   </div>
 </div>
@@ -1617,10 +1671,7 @@
       'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1130480/8efdd0c1-05de-4579-85fa-1f7b7c2abe1e/8efdd0c1-05de-4579-85fa-1f7b7c2abe1e-15864072.png',
       'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1130480/aac88473-5f1d-4022-a73e-0bf4bbb34040/aac88473-5f1d-4022-a73e-0bf4bbb34040-15864074.png',
     ],
-    certificates: [
-      'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1130480/ce0d36d3-521d-47bf-9e83-b2c9054ed9c5/ce0d36d3-521d-47bf-9e83-b2c9054ed9c5-15767221.jpeg',
-      'https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1130480/1f174933-330b-49fc-be5a-a3a5139091c4/1f174933-330b-49fc-be5a-a3a5139091c4-15767244.jpeg',
-    ],
+    certificates: [],
   };
 
   let lbCurrent = { set: 'achievements', idx: 0 };
