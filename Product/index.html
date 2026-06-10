@@ -570,7 +570,9 @@
   gap: 32px;
   animation: marquee 22s linear infinite;
   white-space: nowrap;
-  width: max-content; /* ← добавь это */
+  width: max-content;
+  will-change: transform;
+  flex-shrink: 0;
 }
 
   @keyframes marquee {
@@ -1641,12 +1643,12 @@ footer::before {
     padding: 24px 0 !important;
   }
   .coming-soon .container {
-    flex-direction: column !important;
-    gap: 10px !important;
-    align-items: flex-start !important;
+    flex-direction: row !important;
+    gap: 16px !important;
+    align-items: center !important;
   }
   .coming-soon-item {
-    font-size: 17px !important;
+    font-size: 15px !important;
   }
 
   /* ORDER SECTION */
@@ -1842,11 +1844,12 @@ footer::before {
     <div class="product-card">
       <div class="product-card-photo">
         <img class="product-card-img"
-          src="https://images.unsplash.com/photo-1694078421071-c3cfbbb3de44?fm=jpg&q=85&w=800&auto=format&fit=crop"
+          src="https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/fe71368b-d947-459d-bd3a-128b97f87bea/fe71368b-d947-459d-bd3a-128b97f87bea-16098474.jpeg"
           alt="Фундук">
         <div class="product-card-photo-overlay"></div>
         <div class="product-card-gallery">
-          <img class="product-card-thumb" src="https://images.unsplash.com/photo-1645004479244-3cc60c65df50?fm=jpg&q=80&w=200&auto=format&fit=crop" alt="">
+          <img class="product-card-thumb" src="https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/c0310eba-0741-42a7-9c4a-2cd1ccce2892/c0310eba-0741-42a7-9c4a-2cd1ccce2892-16098455.jpeg" alt="Саженцы фундука крупно">
+          <img class="product-card-thumb" src="https://90f1661d-2ff4-4f29-b07c-0e47453ca691.selstorage.ru/site1146672/9a69c868-6ae8-4c6e-b986-b89c77cab646/9a69c868-6ae8-4c6e-b986-b89c77cab646-16098465.jpeg" alt="Плантация саженцев фундука">
         </div>
       </div>
       <div class="product-card-body">
@@ -1867,7 +1870,7 @@ footer::before {
 <section class="coming-soon">
   <div class="container">
     <div class="coming-soon-label">Скоро в продаже</div>
-    <div style="overflow:hidden; flex:1;">
+    <div style="overflow:hidden; flex:1; min-width:0;">
       <div class="coming-soon-track" id="marquee">
         <span class="coming-soon-item">🍉 Арбузы</span>
         <span class="coming-soon-item">🍈 Дыни</span>
