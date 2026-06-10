@@ -557,13 +557,14 @@
   }
 
   .coming-soon-label {
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.8;  /* ← добавь сюда */
+}
 
   .coming-soon-track {
   display: flex;
@@ -1870,8 +1871,9 @@ footer::before {
 <section class="coming-soon">
   <div class="container">
     <div class="coming-soon-label">
+  <div class="coming-soon-label">
   <span>Так же в продаже</span><br>
-  <span style="opacity: 0.6; font-size: 8px;">уточняйте по наличию</span>
+  <span>уточняйте по наличию</span>
 </div>
     <div style="overflow:hidden; flex:1; min-width:0;">
       <div class="coming-soon-track" id="marquee">
