@@ -1127,6 +1127,8 @@
   </div>
 </div>
 
+<!-- TAB NAVIGATION ANCHOR -->
+<div id="tab-nav-anchor"></div>
 <!-- TAB NAVIGATION -->
 <div class="tab-nav">
   <div class="tab-row-top">
@@ -1601,12 +1603,12 @@
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
     btn.classList.add('active');
-    // Scroll to the top of the tab navigation
-    var tabNav = document.querySelector('.tab-nav');
-    if (tabNav) {
-      var navHeight = document.getElementById('main-nav') ? document.getElementById('main-nav').offsetHeight : 72;
-      var tabTop = tabNav.getBoundingClientRect().top + window.scrollY - navHeight;
-      window.scrollTo({ top: tabTop, behavior: 'smooth' });
+    // Scroll to anchor placed just above the sticky tab-nav
+    var anchor = document.getElementById('tab-nav-anchor');
+    if (anchor) {
+      var navHeight = (document.getElementById('main-nav') || {}).offsetHeight || 72;
+      var anchorTop = anchor.getBoundingClientRect().top + window.pageYOffset - navHeight;
+      window.scrollTo({ top: anchorTop, behavior: 'smooth' });
     }
     // Re-trigger observer on newly visible items
     setTimeout(triggerObserver, 50);
